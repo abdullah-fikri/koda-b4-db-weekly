@@ -19,20 +19,21 @@ int id
 varchar(100) name
 }
 
-products_discount {
+discount {
 int id
+product_id int
 varchar(100) name
 timestamp start
 timestamp end
 float percent_discount
 }
 
+
 products {
 int id
 varchar(100) name
 int category_id
 numeric price
-int discount_id
 }
 
 variants {
@@ -70,6 +71,19 @@ numeric subtotal
 varchar(50) status
 }
 
+promo_card {
+    int id
+    name varchar(100)
+    start timestamp
+    end timestamp
+}
+
+porduct_promo_card {
+    int id
+    promo_card_id int
+    product_id int
+}
+
 users ||--|| profiles : has_profile
 users ||--o{ orders : makes
 orders ||--o{ order_items : contains
@@ -77,6 +91,9 @@ order_items ||--|| products : product_detail
 order_items ||--|| variants : variant_choice
 payments ||--o{ orders : payment_method
 shippings ||--o{ orders : delivery_method
+
+products }o--|| discount : discount
 categories ||--o{ products : category
-products_discount ||--o{ products : discount
+products ||--o{ porduct_promo_card : promo_kupon
+porduct_promo_card }o--|| promo_card : promo_kupon
 ```
