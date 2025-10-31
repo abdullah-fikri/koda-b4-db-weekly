@@ -19,6 +19,12 @@ int id
 varchar(100) name
 }
 
+product_categories {
+int id
+int product_id
+int categories_id
+}
+
 discount {
 int id
 product_id int
@@ -93,7 +99,8 @@ payments ||--o{ orders : payment_method
 shippings ||--o{ orders : delivery_method
 
 products }o--|| discount : discount
-categories ||--o{ products : category
+categories ||--o{ product_categories : category
+product_categories }o--|| products : category
 products ||--o{ porduct_promo_card : promo_kupon
 porduct_promo_card }o--|| promo_card : promo_kupon
 ```
