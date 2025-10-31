@@ -7,11 +7,43 @@ varchar(100) email
 text password
 }
 
-profiles {
+profile {
 int id
-int user_id
+bigint users_id
 varchar(100) username
 varchar(20) phone
+varchar(100) address
+}
+
+payment {
+int id
+varchar(100) name
+varchar(150) img
+}
+
+shippings {
+int id
+varchar(100) name
+}
+
+orders {
+int id
+bigint users_id
+bigint payment_id
+bigint shipping_id
+timestamp order_date
+varchar(50) status
+}
+
+order_items {
+int id
+bigint order_id
+bigint product_id
+bigint variant_id
+bigint size_id
+int qty
+numeric subtotal
+varchar(50) status
 }
 
 categories {
@@ -19,88 +51,73 @@ int id
 varchar(100) name
 }
 
-product_categories {
-int id
-int product_id
-int categories_id
-}
-
-discount {
-int id
-product_id int
-varchar(100) name
-timestamp start
-timestamp end
-float percent_discount
-}
-
-
 products {
 int id
 varchar(100) name
-int category_id
+text description
 numeric price
+int stock
+bigint category_id
 }
 
-variants {
+variant {
 int id
 varchar(100) name
 }
 
-payments {
-int id
-varchar(100) name
-}
-
-shippings {
+size {
 int id
 varchar(50) name
 }
 
-orders {
+discount {
 int id
-int user_id
-int payment_id
-int shipping_id
-timestamp order_date
-varchar(50) status
+varchar(100) name
+timestamp start_discount
+timestamp end_discount
+boolean is_active
+float percent_discount
 }
 
-order_items {
+product_discount {
 int id
-int order_id
-int product_id
-int variant_id
-int qty
-numeric unit_price
-numeric subtotal
-varchar(50) status
+bigint product_id
+bigint discount_id
+}
+
+product_img {
+int id
+varchar(150) image
+bigint product_id
 }
 
 promo_card {
-    int id
-    name varchar(100)
-    start timestamp
-    end timestamp
+int id
+varchar(100) name
+timestamp start
+timestamp end_promo
+boolean is_active
 }
 
-porduct_promo_card {
-    int id
-    promo_card_id int
-    product_id int
+product_promo_card {
+int id
+bigint promo_card_id
+bigint product_id
 }
 
-users ||--|| profiles : has_profile
+users ||--|| profile : has_profile
 users ||--o{ orders : makes
 orders ||--o{ order_items : contains
 order_items ||--|| products : product_detail
-order_items ||--|| variants : variant_choice
-payments ||--o{ orders : payment_method
+order_items ||--|| variant : variant_choice
+order_items ||--|| size : size_option
+payment ||--o{ orders : payment_method
 shippings ||--o{ orders : delivery_method
 
-products }o--|| discount : discount
-categories ||--o{ product_categories : category
-product_categories }o--|| products : category
-products ||--o{ porduct_promo_card : promo_kupon
-porduct_promo_card }o--|| promo_card : promo_kupon
+categories ||--o{ products : category
+products ||--o{ product_img : has_images
+products ||--o{ product_discount : has_discount
+discount ||--o{ product_discount : applied_to
+products ||--o{ product_promo_card : promo
+promo_card ||--o{ product_promo_card : promo_item
 ```
