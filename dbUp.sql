@@ -150,6 +150,7 @@ CREATE TABLE product_size (
     id SERIAL PRIMARY KEY,
     product_id BIGINT,
     size_id BIGINT,
+    price NUMERIC(10,2) NOT NULL,        
     FOREIGN KEY (product_id) REFERENCES products(id),
     FOREIGN KEY (size_id) REFERENCES size(id),
     created_at TIMESTAMP DEFAULT now(),
